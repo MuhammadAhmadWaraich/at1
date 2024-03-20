@@ -27,5 +27,19 @@ document.addEventListener("DOMContentLoaded", function() {
             currentQuestionIndex++;
             displayQuestion();
         }
+
     });
+}); 
+
+document.getElementById("category").addEventListener("change", function() {
+    var selectedCategory = this.value;
+    var questions = JSON.parse(document.getElementById("content").dataset.questions);
+
+    // Filter questions based on selected category
+    var filteredQuestions = questions.filter(function(question) {
+        return selectedCategory === "All" || question.fields.category === selectedCategory;
+    });
+
+    // Update the displayed questions
+    document.getElementById("content").dataset.questions = JSON.stringify(filteredQuestions);
 });
