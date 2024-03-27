@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     let currentQuestionIndex = 0;
     const questions = JSON.parse(document.getElementById('content').getAttribute('data-questions'));
+    console.log("questions",questions)
     const content = document.getElementById('content');
     const btn = document.getElementById('revealBtn');
 
@@ -29,17 +30,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
     });
-}); 
-
-document.getElementById("category").addEventListener("change", function() {
-    var selectedCategory = this.value;
-    var questions = JSON.parse(document.getElementById("content").dataset.questions);
-
-    // Filter questions based on selected category
-    var filteredQuestions = questions.filter(function(question) {
-        return selectedCategory === "All" || question.fields.category === selectedCategory;
+    document.getElementById("categoryDropdown").addEventListener("change", function() {
+        var selectedCategory = this.value;
+        if (selectedCategory === "") {
+            questions = questions.slice(); // Reset questions to initial set
+        } else {
+            questions = questions.filter(function(question) {
+                return question.fields.category === selectedCategory;
+            });
+        }
+        currentQuestionIndex = 0; // Reset currentQuestionIndex
+        displayQuestion();
     });
-
-    // Update the displayed questions
-    document.getElementById("content").dataset.questions = JSON.stringify(filteredQuestions);
 });
