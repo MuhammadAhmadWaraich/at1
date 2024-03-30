@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     let currentQuestionIndex = 0;
     const questions = JSON.parse(document.getElementById('content').getAttribute('data-questions'));
-    console.log("questions",questions)
+    console.log("questions", questions);
     const content = document.getElementById('content');
     const btn = document.getElementById('revealBtn');
 

@@ -4,7 +4,7 @@
 <head>
     <title>Q&A</title>
     <link href="{% static 'users/styles.css' %}" rel="stylesheet">
-    <script src="{% static 'eduprod/quiz.js' %}" defer></script>
+    <script src="{% static 'eduprod/scripts.js' %}" defer></script>
 </head>
 <body>  
     <div class="header">
@@ -27,6 +27,7 @@
         </ul>
     {% endif %}
     {% block body %}
-    {% endblock %}
+    <div id="content" data-questions="{{ questions_json }}"></div>
+    {% endblock %}    
 </body>
 </html>
