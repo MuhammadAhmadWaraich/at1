@@ -1,15 +1,23 @@
 from django.core import serializers
 from django.shortcuts import render
 from .models import Question
-from django.contrib.auth.decorators import login_required
+import random
 
-@login_required
 def index(request):
-    questions = Question.objects.all()
+    first_id = Question.objects.order_by('id').first().id
+    last_id = Question.objects.order_by('id').last().id
+    random_ids = []
+
+    while len(random_ids) < 5:
+        random_id = random.randint(first_id, last_id)
+        if Question.objects.filter(id=random_id).exists() and random_id not in random_ids:
+            random_ids.append(random_id)
+
+    questions = Question.objects.filter(id__in=random_ids)
     questions_json = serializers.serialize('json', questions)
     categories = Question.objects.values_list('category', flat=True).distinct()
 
     return render(request, 'eduprod/index.html', {
         'questions_json': questions_json,
-        'questions': questions  # Pass the queryset directly
+        'categories': categories
     })

@@ -1,20 +1,25 @@
 document.addEventListener("DOMContentLoaded", function() {
     let currentQuestionIndex = 0;
-    const questions = JSON.parse(document.getElementById('content').getAttribute('data-questions'));
-    console.log("questions", questions);
+    let questions = JSON.parse(document.getElementById('content').getAttribute('data-questions')); // Changed from const to let
+
     const content = document.getElementById('content');
     const btn = document.getElementById('revealBtn');
+    const categoryDropdown = document.getElementById("categoryDropdown"); // Added reference to category dropdown
 
     function displayQuestion() {
         if (currentQuestionIndex < questions.length) {
-            const question = questions[currentQuestionIndex].fields.question_text;
-            const answer = questions[currentQuestionIndex].fields.answer_text;
+            const question = escapeHTML(questions[currentQuestionIndex].fields.question_text);
+            const answer = escapeHTML(questions[currentQuestionIndex].fields.answer_text);
             content.innerHTML = `<div class='question'>Question: ${question}</div><div class='answer' style='display: none;'>Answer: ${answer}</div>`;
             btn.textContent = "Reveal Answer";
         } else {
             content.innerHTML = "No more questions.";
             btn.style.display = "none";
         }
+    }
+
+    function escapeHTML(html) {
+        return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
     displayQuestion();
@@ -28,12 +33,12 @@ document.addEventListener("DOMContentLoaded", function() {
             currentQuestionIndex++;
             displayQuestion();
         }
-
     });
-    document.getElementById("categoryDropdown").addEventListener("change", function() {
+
+    categoryDropdown.addEventListener("change", function() {
         var selectedCategory = this.value;
         if (selectedCategory === "") {
-            questions = questions.slice(); // Reset questions to initial set
+            questions = JSON.parse(document.getElementById('content').getAttribute('data-questions')); // Reset questions to initial set
         } else {
             questions = questions.filter(function(question) {
                 return question.fields.category === selectedCategory;
